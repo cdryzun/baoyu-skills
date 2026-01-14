@@ -10,20 +10,24 @@ Break down complex content into eye-catching infographic series for Xiaohongshu 
 ## Usage
 
 ```bash
-# Auto-select style based on content
+# Auto-select style and layout based on content
 /xhs-images posts/ai-future/article.md
 
-# Specify a style
-/xhs-images posts/ai-future/article.md --style cute
-/xhs-images posts/ai-future/article.md --style tech
-/xhs-images posts/ai-future/article.md --style minimal
+# Specify style
+/xhs-images posts/ai-future/article.md --style notion
+
+# Specify layout
+/xhs-images posts/ai-future/article.md --layout dense
+
+# Combine style and layout
+/xhs-images posts/ai-future/article.md --style tech --layout list
 
 # Direct content input
 /xhs-images
 [paste content]
 
-# Direct input with style
-/xhs-images --style bold
+# Direct input with options
+/xhs-images --style bold --layout comparison
 [paste content]
 ```
 
@@ -31,7 +35,17 @@ Break down complex content into eye-catching infographic series for Xiaohongshu 
 
 | Option | Description |
 |--------|-------------|
-| `--style <name>` | Specify infographic style (see Style Gallery below) |
+| `--style <name>` | Visual style (see Style Gallery) |
+| `--layout <name>` | Information layout (see Layout Gallery) |
+
+## Two Dimensions
+
+| Dimension | Controls | Options |
+|-----------|----------|---------|
+| **Style** | Visual aesthetics: colors, lines, decorations | cute, fresh, tech, warm, bold, minimal, retro, pop, notion |
+| **Layout** | Information structure: density, arrangement | sparse, balanced, dense, list, comparison, flow |
+
+Style × Layout can be freely combined. Example: `--style notion --layout dense` creates an intellectual-looking knowledge card with high information density.
 
 ## Style Gallery
 
@@ -89,6 +103,50 @@ Minimalist hand-drawn line art, intellectual
 - **Elements**: Simple line doodles, geometric shapes, hand-drawn wobble, maximum whitespace
 - **Best for**: Knowledge sharing, concept explanations, SaaS content, productivity tips
 
+## Layout Gallery
+
+### 1. `sparse` (Default)
+Minimal information, maximum impact
+- **Density**: 1-2 key points per image
+- **Whitespace**: 60-70% of canvas
+- **Structure**: Single focal point, one core message
+- **Best for**: Covers, quotes, impactful statements, emotional content
+
+### 2. `balanced`
+Standard content layout
+- **Density**: 3-4 key points per image
+- **Whitespace**: 40-50% of canvas
+- **Structure**: Title + 3-4 bullet points or sections
+- **Best for**: Regular content pages, tutorials, explanations
+
+### 3. `dense`
+High information density, knowledge card style
+- **Density**: 5-8 key points per image
+- **Whitespace**: 20-30% of canvas
+- **Structure**: Multiple sections, structured grid, more text
+- **Best for**: Summary cards, cheat sheets, comprehensive guides, 干货总结
+
+### 4. `list`
+Enumeration and ranking format
+- **Density**: 4-7 items
+- **Whitespace**: 30-40% of canvas
+- **Structure**: Numbered or bulleted vertical list, consistent item format
+- **Best for**: Top N lists, checklists, step-by-step guides, rankings
+
+### 5. `comparison`
+Side-by-side contrast layout
+- **Density**: 2 main sections with 2-4 points each
+- **Whitespace**: 30-40% of canvas
+- **Structure**: Left vs Right, Before/After, Pros/Cons
+- **Best for**: Comparisons, transformations, decision helpers, 对比图
+
+### 6. `flow`
+Process and timeline layout
+- **Density**: 3-6 steps/stages
+- **Whitespace**: 30-40% of canvas
+- **Structure**: Connected nodes with arrows, sequential flow
+- **Best for**: Processes, timelines, cause-effect chains, workflows
+
 ## Auto Style Selection
 
 When no `--style` is specified, analyze content to select:
@@ -104,6 +162,26 @@ When no `--style` is specified, analyze content to select:
 | Classic, vintage, old, traditional | `retro` |
 | Fun, exciting, wow, amazing | `pop` |
 | Knowledge, concept, productivity, SaaS, notion | `notion` |
+
+## Auto Layout Selection
+
+When no `--layout` is specified, analyze content structure to select:
+
+| Content Signals | Selected Layout |
+|----------------|-----------------|
+| Single quote, one key point, cover | `sparse` |
+| 3-4 points, explanation, tutorial | `balanced` |
+| 5+ points, summary, cheat sheet, 干货 | `dense` |
+| Numbered items, top N, checklist, steps | `list` |
+| vs, compare, before/after, pros/cons | `comparison` |
+| Process, flow, timeline, steps with order | `flow` |
+
+**Layout by Position**:
+| Position | Recommended Layout |
+|----------|-------------------|
+| Cover | `sparse` |
+| Content | `balanced` or content-appropriate |
+| Ending | `sparse` or `balanced` |
 
 ## File Management
 
@@ -143,11 +221,11 @@ xhs-outputs/
 
 ## Workflow
 
-### Step 1: Analyze Content & Select Style
+### Step 1: Analyze Content & Select Style/Layout
 
 1. Read content
-2. If `--style` specified, use that style
-3. Otherwise, scan for style signals and auto-select
+2. If `--style` specified, use that style; otherwise auto-select
+3. If `--layout` specified, use that layout; otherwise auto-select per image
 4. Determine image count based on content complexity:
 
 | Content Type | Image Count |
@@ -156,15 +234,18 @@ xhs-outputs/
 | Medium complexity / tutorial | 4-6 |
 | Deep dive / multi-dimensional | 7-10 |
 
+**Note**: Layout can vary per image in a series. Cover typically uses `sparse`, content pages use `balanced`/`dense`/`list` as appropriate.
+
 ### Step 2: Generate Outline
 
-Plan for each image with style-specific approach:
+Plan for each image with style and layout specifications:
 
 ```markdown
 # Xiaohongshu Infographic Series Outline
 
 **Topic**: [topic description]
 **Style**: [selected style]
+**Default Layout**: [selected layout or "varies"]
 **Image Count**: N
 **Generated**: YYYY-MM-DD HH:mm
 
@@ -173,6 +254,7 @@ Plan for each image with style-specific approach:
 ## Image 1 of N
 
 **Position**: Cover
+**Layout**: sparse
 **Core Message**: [one-liner]
 **Filename**: 01-cover.png
 
@@ -180,11 +262,24 @@ Plan for each image with style-specific approach:
 - Title: xxx
 - Subtitle: xxx
 
-**Visual Concept**: [style-appropriate description]
+**Visual Concept**: [style + layout appropriate description]
 
 ---
 
 ## Image 2 of N
+
+**Position**: Content
+**Layout**: [balanced/dense/list/comparison/flow]
+**Core Message**: [one-liner]
+**Filename**: 02-xxx.png
+
+**Text Content**:
+- Title: xxx
+- Points: [list based on layout density]
+
+**Visual Concept**: [description matching style + layout]
+
+---
 ...
 ```
 
@@ -194,18 +289,19 @@ Save outline as `outline.md`.
 
 ### Step 4: Generate Images One by One
 
-For each image, create a style-specific prompt file.
+For each image, create a prompt file with style and layout specifications.
 
 **Prompt Format**:
 
 ```markdown
 Infographic theme: [topic]
 Style: [style name]
+Layout: [layout name]
 Position: [cover/content/ending]
 
 Visual composition:
 - Main visual: [style-appropriate description]
-- Layout: [element positioning for 3:4 vertical format]
+- Arrangement: [layout-specific structure]
 - Decorative elements: [style-specific decorations]
 
 Color scheme:
@@ -215,10 +311,22 @@ Color scheme:
 
 Text content:
 - Title: 「xxx」(large, prominent)
-- Key points: 「xxx」「xxx」
+- Key points: [based on layout density]
 
-Style notes: [specific style characteristics]
+Layout instructions: [layout-specific guidance]
+Style notes: [style-specific characteristics]
 ```
+
+**Layout-Specific Instructions**:
+
+| Layout | Arrangement Instructions |
+|--------|-------------------------|
+| `sparse` | Single focal point centered, 1-2 text elements, maximum breathing room |
+| `balanced` | Title at top, 3-4 points in clear sections, moderate spacing |
+| `dense` | Grid or multi-section layout, 5-8 points, compact but organized |
+| `list` | Vertical numbered/bulleted list, consistent item spacing, clear hierarchy |
+| `comparison` | Two-column split, clear divider, mirrored structure left/right |
+| `flow` | Horizontal or vertical flow with arrows, connected nodes/steps |
 
 Then generate using:
 
@@ -238,13 +346,14 @@ Xiaohongshu Infographic Series Complete!
 
 Topic: [topic]
 Style: [style name]
+Layout: [layout name or "varies"]
 Location: [directory path]
 Images: N total
 
-- 01-cover.png ✓ Cover
-- 02-content-1.png ✓ Content
-- 03-content-2.png ✓ Content
-- 04-ending.png ✓ Ending
+- 01-cover.png ✓ Cover (sparse)
+- 02-content-1.png ✓ Content (balanced)
+- 03-content-2.png ✓ Content (dense)
+- 04-ending.png ✓ Ending (sparse)
 
 Outline: outline.md
 ```
@@ -332,11 +441,89 @@ Elements: Simple line doodles, hand-drawn wobble effect, geometric shapes, stick
 Typography: Clean hand-drawn lettering, simple sans-serif labels
 ```
 
+## Layout Reference Details
+
+### sparse
+```
+Information Density: Very Low (1-2 points)
+Whitespace: 60-70%
+Structure: Single centered focal point
+Text Elements: Title only, or title + one subtitle/tagline
+Visual Balance: Centered, symmetrical, breathing room on all sides
+Best Pairing: Any style, especially effective with bold, minimal, notion
+```
+
+### balanced
+```
+Information Density: Medium (3-4 points)
+Whitespace: 40-50%
+Structure: Title at top, content sections below
+Text Elements: Title + 3-4 bullet points or key messages
+Visual Balance: Top-weighted title, evenly distributed content below
+Best Pairing: All styles work well
+```
+
+### dense
+```
+Information Density: High (5-8 points)
+Whitespace: 20-30%
+Structure: Multi-section grid or stacked blocks
+Text Elements: Title + multiple sections with headers + numerous points
+Visual Balance: Organized chaos, clear section boundaries, compact spacing
+Best Pairing: tech, notion, minimal (clean styles prevent visual overload)
+```
+
+### list
+```
+Information Density: Medium-High (4-7 items)
+Whitespace: 30-40%
+Structure: Vertical enumeration with numbers or bullets
+Text Elements: Title + numbered/bulleted items, consistent format per item
+Visual Balance: Left-aligned list, clear number/bullet hierarchy
+Best Pairing: All styles, especially cute (checklist), bold (rankings)
+```
+
+### comparison
+```
+Information Density: Medium (2×2-4 points)
+Whitespace: 30-40%
+Structure: Two-column split with center divider
+Text Elements: Title + left label + right label + mirrored points
+Visual Balance: Symmetrical left/right, clear visual contrast
+Best Pairing: bold (dramatic contrast), tech (data comparison), warm (before/after stories)
+```
+
+### flow
+```
+Information Density: Medium (3-6 steps)
+Whitespace: 30-40%
+Structure: Connected nodes with directional arrows
+Text Elements: Title + step labels + optional descriptions per step
+Visual Balance: Directional flow (top→bottom or left→right), clear progression
+Best Pairing: tech (process diagrams), notion (simple flows), fresh (organic flows)
+```
+
 ## Content Breakdown Principles
 
-1. **Cover (Image 1)**: Strong visual impact, core title, attention hook
-2. **Content (Middle)**: One core point per image, moderate information density
-3. **Ending (Last)**: Summary / call-to-action / memorable quote
+1. **Cover (Image 1)**: Strong visual impact, core title, attention hook → `sparse` layout
+2. **Content (Middle)**: Core points per image, density varies by content → `balanced`/`dense`/`list`/`comparison`/`flow`
+3. **Ending (Last)**: Summary / call-to-action / memorable quote → `sparse` or `balanced`
+
+**Style × Layout Matrix** (recommended combinations):
+
+| | sparse | balanced | dense | list | comparison | flow |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| cute | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓ | ✓ |
+| fresh | ✓✓ | ✓✓ | ✓ | ✓ | ✓ | ✓✓ |
+| tech | ✓ | ✓✓ | ✓✓ | ✓✓ | ✓✓ | ✓✓ |
+| warm | ✓✓ | ✓✓ | ✓ | ✓ | ✓✓ | ✓ |
+| bold | ✓✓ | ✓ | ✓ | ✓✓ | ✓✓ | ✓ |
+| minimal | ✓✓ | ✓✓ | ✓✓ | ✓ | ✓ | ✓ |
+| retro | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓ | ✓ |
+| pop | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓✓ | ✓ |
+| notion | ✓✓ | ✓✓ | ✓✓ | ✓✓ | ✓✓ | ✓✓ |
+
+✓✓ = highly recommended, ✓ = works well
 
 ## Notes
 

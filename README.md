@@ -56,15 +56,36 @@ Interacts with Gemini Web to generate text and images.
 
 ### xhs-images
 
-Xiaohongshu (RedNote) infographic series generator. Breaks down content into 1-10 cartoon-style infographics.
+Xiaohongshu (RedNote) infographic series generator. Breaks down content into 1-10 cartoon-style infographics with **Style × Layout** two-dimensional system.
 
 ```bash
-# Specify article path
+# Auto-select style and layout
 /xhs-images posts/ai-future/article.md
+
+# Specify style
+/xhs-images posts/ai-future/article.md --style notion
+
+# Specify layout
+/xhs-images posts/ai-future/article.md --layout dense
+
+# Combine style and layout
+/xhs-images posts/ai-future/article.md --style tech --layout list
 
 # Direct content input
 /xhs-images 今日星座运势
 ```
+
+**Styles** (visual aesthetics): `cute` (default), `fresh`, `tech`, `warm`, `bold`, `minimal`, `retro`, `pop`, `notion`
+
+**Layouts** (information density):
+| Layout | Density | Best for |
+|--------|---------|----------|
+| `sparse` | 1-2 pts | Covers, quotes |
+| `balanced` | 3-4 pts | Regular content |
+| `dense` | 5-8 pts | Knowledge cards, cheat sheets |
+| `list` | 4-7 items | Checklists, rankings |
+| `comparison` | 2 sides | Before/after, pros/cons |
+| `flow` | 3-6 steps | Processes, timelines |
 
 ### cover-image
 
@@ -103,7 +124,7 @@ Generate professional slide deck images from content. Creates comprehensive outl
 /slide-deck path/to/article.md --lang zh
 ```
 
-Available styles: `editorial` (default), `corporate`, `technical`, `playful`, `minimal`, `storytelling`, `warm`, `retro-flat`
+Available styles: `editorial` (default), `corporate`, `technical`, `playful`, `minimal`, `storytelling`, `warm`, `retro-flat`, `notion`
 
 ### post-to-wechat
 

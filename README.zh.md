@@ -56,15 +56,36 @@
 
 ### xhs-images
 
-小红书信息图系列生成器。将内容拆解为 1-10 张卡通风格信息图。
+小红书信息图系列生成器。将内容拆解为 1-10 张卡通风格信息图，支持 **风格 × 布局** 二维系统。
 
 ```bash
-# 指定文章路径
+# 自动选择风格和布局
 /xhs-images posts/ai-future/article.md
+
+# 指定风格
+/xhs-images posts/ai-future/article.md --style notion
+
+# 指定布局
+/xhs-images posts/ai-future/article.md --layout dense
+
+# 组合风格和布局
+/xhs-images posts/ai-future/article.md --style tech --layout list
 
 # 直接输入内容
 /xhs-images 今日星座运势
 ```
+
+**风格**（视觉美学）：`cute`（默认）、`fresh`、`tech`、`warm`、`bold`、`minimal`、`retro`、`pop`、`notion`
+
+**布局**（信息密度）：
+| 布局 | 密度 | 适用场景 |
+|------|------|----------|
+| `sparse` | 1-2 点 | 封面、金句 |
+| `balanced` | 3-4 点 | 常规内容 |
+| `dense` | 5-8 点 | 知识卡片、干货总结 |
+| `list` | 4-7 项 | 清单、排行 |
+| `comparison` | 双栏 | 对比、优劣 |
+| `flow` | 3-6 步 | 流程、时间线 |
 
 ### cover-image
 
@@ -103,7 +124,7 @@
 /slide-deck path/to/article.md --lang zh
 ```
 
-可用风格：`editorial`（默认）、`corporate`、`technical`、`playful`、`minimal`、`storytelling`、`warm`、`retro-flat`
+可用风格：`editorial`（默认）、`corporate`、`technical`、`playful`、`minimal`、`storytelling`、`warm`、`retro-flat`、`notion`
 
 ### post-to-wechat
 
