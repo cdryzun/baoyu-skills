@@ -1,5 +1,54 @@
 # Prompt Construction
 
+## Prompt File Format
+
+Each prompt file uses YAML frontmatter + content:
+
+```yaml
+---
+illustration_id: 01
+type: infographic
+style: blueprint
+references:                    # ⚠️ ONLY if files EXIST in references/ directory
+  - ref_id: 01
+    filename: 01-ref-diagram.png
+    usage: direct              # direct | style | palette
+---
+
+[Type-specific template content below...]
+```
+
+**⚠️ CRITICAL - When to include `references` field**:
+
+| Situation | Action |
+|-----------|--------|
+| Reference file saved to `references/` | Include in frontmatter ✓ |
+| Style extracted verbally (no file) | DO NOT include in frontmatter, append to prompt body instead |
+| File path in frontmatter but file doesn't exist | ERROR - remove references field |
+
+**Reference Usage Types** (only when file exists):
+
+| Usage | Description | Generation Action |
+|-------|-------------|-------------------|
+| `direct` | Primary visual reference | Pass to `--ref` parameter |
+| `style` | Style characteristics only | Describe style in prompt text |
+| `palette` | Color palette extraction | Include colors in prompt |
+
+**If no reference file but style/palette extracted verbally**, append directly to prompt body:
+```
+COLORS (from reference):
+- Primary: #E8756D coral
+- Secondary: #7ECFC0 mint
+...
+
+STYLE (from reference):
+- Clean lines, minimal shadows
+- Gradient backgrounds
+...
+```
+
+---
+
 ## Principles
 
 Good prompts must include:
