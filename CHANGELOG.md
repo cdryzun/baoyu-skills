@@ -2,6 +2,11 @@
 
 English | [中文](./CHANGELOG.zh.md)
 
+## 1.28.2 - 2026-02-03
+
+### Fixes
+- `baoyu-post-to-x`: reuse existing Chrome instance when available; fix placeholder matching issue where `XIMGPH_1` incorrectly matched `XIMGPH_10`; improve image sorting by placeholder index; use `execCommand` for more reliable placeholder deletion.
+
 ## 1.28.1 - 2026-02-02
 
 ### Refactor
