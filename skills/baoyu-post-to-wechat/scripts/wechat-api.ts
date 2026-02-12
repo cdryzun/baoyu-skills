@@ -365,7 +365,7 @@ Frontmatter Fields (markdown):
   title               Article title
   author              Author name
   digest/summary      Article summary
-  featureImage/coverImage/cover/image   Cover image path
+  coverImage/featureImage/cover/image   Cover image path
 
 Comments:
   Comments are enabled by default, open to all users.
@@ -555,8 +555,8 @@ async function main(): Promise<void> {
 
   let thumbMediaId = "";
   const rawCoverPath = args.cover ||
-    frontmatter.featureImage ||
     frontmatter.coverImage ||
+    frontmatter.featureImage ||
     frontmatter.cover ||
     frontmatter.image;
   const coverPath = rawCoverPath && !path.isAbsolute(rawCoverPath) && args.cover
@@ -578,7 +578,7 @@ async function main(): Promise<void> {
   }
 
   if (args.articleType === "news" && !thumbMediaId) {
-    console.error("Error: No cover image. Provide via --cover, frontmatter.featureImage, or include an image in content.");
+    console.error("Error: No cover image. Provide via --cover, frontmatter.coverImage, or include an image in content.");
     process.exit(1);
   }
 
