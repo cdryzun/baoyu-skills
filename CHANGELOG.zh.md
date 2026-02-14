@@ -2,6 +2,14 @@
 
 [English](./CHANGELOG.md) | 中文
 
+## 1.33.1 - 2026-02-14
+
+### 重构
+- `baoyu-post-to-x`：将手写 markdown 解析器替换为 marked 生态系统，用于 X Articles HTML 转换。
+
+### 文档
+- `baoyu-post-to-x`：移除所有脚本的 `--submit` 参数；明确脚本仅将内容填充到浏览器，由用户手动审核和发布。
+
 ## 1.33.0 - 2026-02-13
 
 ### 新功能

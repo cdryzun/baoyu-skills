@@ -2,6 +2,14 @@
 
 English | [中文](./CHANGELOG.zh.md)
 
+## 1.33.1 - 2026-02-14
+
+### Refactor
+- `baoyu-post-to-x`: replace hand-rolled markdown parser with marked ecosystem for X Articles HTML conversion.
+
+### Documentation
+- `baoyu-post-to-x`: remove `--submit` flag from all scripts; clarify that scripts only fill content into browser for manual review and publish.
+
 ## 1.33.0 - 2026-02-13
 
 ### Features
