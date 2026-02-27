@@ -20,7 +20,7 @@ default_aspect_ratio: null  # "16:9"|"1:1"|"4:3"|"3:4"|"2.35:1"|null
 default_image_size: null    # 1K|2K|4K|null (Google only, overrides quality)
 
 default_model:
-  google: null              # e.g., "gemini-3-pro-image-preview"
+  google: null              # e.g., "gemini-3-pro-image-preview", "gemini-3.1-flash-image-preview"
   openai: null              # e.g., "gpt-image-1.5"
   dashscope: null           # e.g., "z-image-turbo"
   replicate: null           # e.g., "google/nano-banana-pro"

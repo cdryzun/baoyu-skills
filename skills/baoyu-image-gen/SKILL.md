@@ -13,33 +13,28 @@ Official API-based image generation. Supports OpenAI, Google, DashScope (阿里�
 1. `SKILL_DIR` = this SKILL.md file's directory
 2. Script path = `${SKILL_DIR}/scripts/main.ts`
 
-## Preferences (EXTEND.md)
+## Step 0: Load Preferences ⛔ BLOCKING
 
-Use Bash to check EXTEND.md existence (priority order):
+**CRITICAL**: This step MUST complete BEFORE any image generation. Do NOT skip or defer.
+
+Check EXTEND.md existence (priority: project → user):
 
 ```bash
-# Check project-level first
 test -f .baoyu-skills/baoyu-image-gen/EXTEND.md && echo "project"
-
-# Then user-level (cross-platform: $HOME works on macOS/Linux/WSL)
 test -f "$HOME/.baoyu-skills/baoyu-image-gen/EXTEND.md" && echo "user"
 ```
 
-┌──────────────────────────────────────────────────┬───────────────────┐
-│                       Path                       │     Location      │
-├──────────────────────────────────────────────────┼───────────────────┤
-│ .baoyu-skills/baoyu-image-gen/EXTEND.md          │ Project directory │
-├──────────────────────────────────────────────────┼───────────────────┤
-│ $HOME/.baoyu-skills/baoyu-image-gen/EXTEND.md    │ User home         │
-└──────────────────────────────────────────────────┴───────────────────┘
+| Result | Action |
+|--------|--------|
+| Found | Load, parse, apply settings. If `default_model.[provider]` is null → ask model only (Flow 2) |
+| Not found | ⛔ Run first-time setup ([references/config/first-time-setup.md](references/config/first-time-setup.md)) → Save EXTEND.md → Then continue |
 
-┌───────────┬───────────────────────────────────────────────────────────────────────────┐
-│  Result   │                                  Action                                   │
-├───────────┼───────────────────────────────────────────────────────────────────────────┤
-│ Found     │ Read, parse, apply settings                                               │
-├───────────┼───────────────────────────────────────────────────────────────────────────┤
-│ Not found │ Use defaults                                                              │
-└───────────┴───────────────────────────────────────────────────────────────────────────┘
+**CRITICAL**: If not found, complete the full setup (provider + model + quality + save location) using AskUserQuestion BEFORE generating any images. Generation is BLOCKED until EXTEND.md is created.
+
+| Path | Location |
+|------|----------|
+| `.baoyu-skills/baoyu-image-gen/EXTEND.md` | Project directory |
+| `$HOME/.baoyu-skills/baoyu-image-gen/EXTEND.md` | User home |
 
 **EXTEND.md Supports**: Default provider | Default quality | Default aspect ratio | Default image size | Default models
 
@@ -87,12 +82,12 @@ npx -y bun ${SKILL_DIR}/scripts/main.ts --prompt "A cat" --image out.png --provi
 | `--promptfiles <files...>` | Read prompt from files (concatenated) |
 | `--image <path>` | Output image path (required) |
 | `--provider google\|openai\|dashscope\|replicate` | Force provider (default: google) |
-| `--model <id>`, `-m` | Model ID (`--ref` with OpenAI requires GPT Image model, e.g. `gpt-image-1.5`) |
+| `--model <id>`, `-m` | Model ID (Google: `gemini-3-pro-image-preview`, `gemini-3.1-flash-image-preview`; OpenAI: `gpt-image-1.5`) |
 | `--ar <ratio>` | Aspect ratio (e.g., `16:9`, `1:1`, `4:3`) |
 | `--size <WxH>` | Size (e.g., `1024x1024`) |
 | `--quality normal\|2k` | Quality preset (default: 2k) |
 | `--imageSize 1K\|2K\|4K` | Image size for Google (default: from quality) |
-| `--ref <files...>` | Reference images. Supported by Google multimodal and OpenAI edits (GPT Image models). If provider omitted: Google first, then OpenAI |
+| `--ref <files...>` | Reference images. Supported by Google multimodal (`gemini-3-pro-image-preview`, `gemini-3-flash-preview`, `gemini-3.1-flash-image-preview`) and OpenAI edits (GPT Image models). If provider omitted: Google first, then OpenAI |
 | `--n <count>` | Number of images |
 | `--json` | JSON output |
 
@@ -194,7 +189,7 @@ Supported: `1:1`, `16:9`, `9:16`, `4:3`, `3:4`, `2.35:1`
 - Missing API key → error with setup instructions
 - Generation failure → auto-retry once
 - Invalid aspect ratio → warning, proceed with default
-- Reference images with unsupported provider/model → error with fix hint (switch to Google multimodal or OpenAI GPT Image edits)
+- Reference images with unsupported provider/model → error with fix hint (switch to Google multimodal: `gemini-3-pro-image-preview`, `gemini-3.1-flash-image-preview`; or OpenAI GPT Image edits)
 
 ## Extension Support
 

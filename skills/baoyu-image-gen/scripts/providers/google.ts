@@ -6,6 +6,7 @@ import type { CliArgs } from "../types";
 const GOOGLE_MULTIMODAL_MODELS = [
   "gemini-3-pro-image-preview",
   "gemini-3-flash-preview",
+  "gemini-3.1-flash-image-preview",
 ];
 const GOOGLE_IMAGEN_MODELS = [
   "imagen-3.0-generate-002",
@@ -303,7 +304,7 @@ export async function generateImage(
   if (isGoogleImagen(model)) {
     if (args.referenceImages.length > 0) {
       throw new Error(
-        "Reference images are not supported with Imagen models. Use gemini-3-pro-image-preview or gemini-3-flash-preview.",
+        "Reference images are not supported with Imagen models. Use gemini-3-pro-image-preview, gemini-3-flash-preview, or gemini-3.1-flash-image-preview.",
       );
     }
     return generateWithImagen(prompt, model, args);
@@ -311,7 +312,7 @@ export async function generateImage(
 
   if (!isGoogleMultimodal(model) && args.referenceImages.length > 0) {
     throw new Error(
-      "Reference images are only supported with Gemini multimodal models. Use gemini-3-pro-image-preview or gemini-3-flash-preview.",
+      "Reference images are only supported with Gemini multimodal models. Use gemini-3-pro-image-preview, gemini-3-flash-preview, or gemini-3.1-flash-image-preview.",
     );
   }
 
