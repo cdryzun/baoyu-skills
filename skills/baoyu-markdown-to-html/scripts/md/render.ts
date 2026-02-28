@@ -44,10 +44,27 @@ const FALLBACK_THEMES: ThemeName[] = ["default", "grace", "simple"];
 const FONT_FAMILY_MAP: Record<string, string> = {
   sans: `-apple-system-font,BlinkMacSystemFont, Helvetica Neue, PingFang SC, Hiragino Sans GB , Microsoft YaHei UI , Microsoft YaHei ,Arial,sans-serif`,
   serif: `Optima-Regular, Optima, PingFangSC-light, PingFangTC-light, 'PingFang SC', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif`,
+  "serif-cjk": `"Source Han Serif SC", "Noto Serif CJK SC", "Source Han Serif CN", STSong, SimSun, serif`,
   mono: `Menlo, Monaco, 'Courier New', monospace`,
 };
 
 const FONT_SIZE_OPTIONS = ["14px", "15px", "16px", "17px", "18px"];
+
+const COLOR_PRESETS: Record<string, string> = {
+  blue: "#0F4C81",
+  green: "#009874",
+  vermilion: "#FA5151",
+  yellow: "#FECE00",
+  purple: "#92617E",
+  sky: "#55C9EA",
+  rose: "#B76E79",
+  olive: "#556B2F",
+  black: "#333333",
+  gray: "#A9A9A9",
+  pink: "#FFB7C5",
+  red: "#A93226",
+  orange: "#D97757",
+};
 
 const CODE_BLOCK_THEMES = [
   "1c-light", "a11y-dark", "a11y-light", "agate", "an-old-hope",
@@ -77,6 +94,8 @@ interface StyleConfig {
   fontSize: string;
   foreground: string;
   blockquoteBackground: string;
+  accentColor: string;
+  containerBg: string;
 }
 
 const DEFAULT_STYLE: StyleConfig = {
@@ -85,6 +104,26 @@ const DEFAULT_STYLE: StyleConfig = {
   fontSize: "16px",
   foreground: "0 0% 3.9%",
   blockquoteBackground: "#f7f7f7",
+  accentColor: "#6B7280",
+  containerBg: "transparent",
+};
+
+const THEME_STYLE_DEFAULTS: Record<string, Partial<StyleConfig>> = {
+  heritage: {
+    primaryColor: COLOR_PRESETS.red,
+    accentColor: "#D4AC0D",
+    containerBg: "rgba(255, 251, 240, 1)",
+    fontFamily: FONT_FAMILY_MAP["serif-cjk"],
+    blockquoteBackground: "rgba(253, 237, 236, 1)",
+  },
+  warm: {
+    primaryColor: COLOR_PRESETS.orange,
+    accentColor: "#E4B1A0",
+    containerBg: "rgba(250, 249, 245, 1)",
+    fontFamily: FONT_FAMILY_MAP.sans,
+    fontSize: "15px",
+    blockquoteBackground: "rgba(255, 255, 255, 0.6)",
+  },
 };
 
 Object.entries(COMMON_LANGUAGES).forEach(([name, lang]) => {
@@ -532,8 +571,8 @@ function printUsage(): void {
       "",
       "Options:",
       `  --theme <name>        Theme (${THEME_NAMES.join(", ")})`,
-      `  --color <hex>         Primary color (default: ${DEFAULT_STYLE.primaryColor})`,
-      `  --font-family <name>  Font: sans, serif, mono, or CSS value`,
+      `  --color <name|hex>    Primary color: ${Object.keys(COLOR_PRESETS).join(", ")}, or hex`,
+      `  --font-family <name>  Font: ${Object.keys(FONT_FAMILY_MAP).join(", ")}, or CSS value`,
       `  --font-size <N>       Font size: ${FONT_SIZE_OPTIONS.join(", ")} (default: 16px)`,
       `  --code-theme <name>   Code highlight theme (default: github)`,
       `  --mac-code-block      Show Mac-style code block header`,
@@ -559,15 +598,19 @@ function resolveFontFamily(value: string): string {
   return FONT_FAMILY_MAP[value] ?? value;
 }
 
+function resolveColor(value: string): string {
+  return COLOR_PRESETS[value] ?? value;
+}
+
 function parseArgs(argv: string[]): CliOptions | null {
   const ext = loadExtendConfig();
 
   let inputPath = "";
   let theme: ThemeName = ext.default_theme ?? "default";
   let keepTitle = ext.keep_title ?? false;
-  let primaryColor = ext.default_color ?? DEFAULT_STYLE.primaryColor;
-  let fontFamily = ext.default_font_family ? resolveFontFamily(ext.default_font_family) : DEFAULT_STYLE.fontFamily;
-  let fontSize = ext.default_font_size ?? DEFAULT_STYLE.fontSize;
+  let primaryColor: string | undefined = ext.default_color ? resolveColor(ext.default_color) : undefined;
+  let fontFamily: string | undefined = ext.default_font_family ? resolveFontFamily(ext.default_font_family) : undefined;
+  let fontSize: string | undefined = ext.default_font_size ?? undefined;
   let codeTheme = ext.default_code_theme ?? "github";
   let isMacCodeBlock = ext.mac_code_block ?? true;
   let isShowLineNumber = ext.show_line_number ?? false;
@@ -605,7 +648,7 @@ function parseArgs(argv: string[]): CliOptions | null {
     if (arg === "--color" || arg.startsWith("--color=")) {
       const val = parseArgValue(argv, i, "--color");
       if (!val) { console.error("Missing value for --color"); return null; }
-      primaryColor = val;
+      primaryColor = resolveColor(val);
       if (!arg.includes("=")) i += 1;
       continue;
     }
@@ -678,9 +721,9 @@ interface CliOptions {
   inputPath: string;
   theme: ThemeName;
   keepTitle: boolean;
-  primaryColor: string;
-  fontFamily: string;
-  fontSize: string;
+  primaryColor?: string;
+  fontFamily?: string;
+  fontSize?: string;
   codeTheme: string;
   isMacCodeBlock: boolean;
   isShowLineNumber: boolean;
@@ -883,6 +926,8 @@ function buildCss(baseCss: string, themeCss: string, style: StyleConfig = DEFAUL
   --md-font-size: ${style.fontSize};
   --foreground: ${style.foreground};
   --blockquote-background: ${style.blockquoteBackground};
+  --md-accent-color: ${style.accentColor};
+  --md-container-bg: ${style.containerBg};
 }
 
 body {
@@ -978,11 +1023,15 @@ function normalizeCssText(cssText: string, style: StyleConfig = DEFAULT_STYLE): 
     .replace(/var\(--md-font-family\)/g, style.fontFamily)
     .replace(/var\(--md-font-size\)/g, style.fontSize)
     .replace(/var\(--blockquote-background\)/g, style.blockquoteBackground)
+    .replace(/var\(--md-accent-color\)/g, style.accentColor)
+    .replace(/var\(--md-container-bg\)/g, style.containerBg)
     .replace(/hsl\(var\(--foreground\)\)/g, "#3f3f3f")
     .replace(/--md-primary-color:\s*[^;"']+;?/g, "")
     .replace(/--md-font-family:\s*[^;"']+;?/g, "")
     .replace(/--md-font-size:\s*[^;"']+;?/g, "")
     .replace(/--blockquote-background:\s*[^;"']+;?/g, "")
+    .replace(/--md-accent-color:\s*[^;"']+;?/g, "")
+    .replace(/--md-container-bg:\s*[^;"']+;?/g, "")
     .replace(/--foreground:\s*[^;"']+;?/g, "");
 }
 
@@ -1038,11 +1087,13 @@ async function main(): Promise<void> {
     options.inputPath.replace(/\.md$/i, ".html")
   );
 
+  const themeDefaults = THEME_STYLE_DEFAULTS[options.theme] ?? {};
   const style: StyleConfig = {
     ...DEFAULT_STYLE,
-    primaryColor: options.primaryColor,
-    fontFamily: options.fontFamily,
-    fontSize: options.fontSize,
+    ...themeDefaults,
+    ...(options.primaryColor !== undefined ? { primaryColor: options.primaryColor } : {}),
+    ...(options.fontFamily !== undefined ? { fontFamily: options.fontFamily } : {}),
+    ...(options.fontSize !== undefined ? { fontSize: options.fontSize } : {}),
   };
 
   const { baseCss, themeCss } = loadThemeCss(options.theme);

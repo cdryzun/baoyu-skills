@@ -1,23 +1,23 @@
 /**
- * MD 橙色主题
- * 暖色调现代风，橙色主色，宽松行距
+ * MD 温暖主题 (warm)
+ * 暖色调现代风，默认橙色主色，宽松行距
  */
 
 /* ==================== 容器样式覆盖 ==================== */
 section,
 container {
-  font-family: PingFang SC, system-ui, -apple-system, BlinkMacSystemFont, Helvetica Neue, Hiragino Sans GB, Microsoft YaHei UI, Microsoft YaHei, Arial, sans-serif;
-  font-size: 15px;
+  font-family: var(--md-font-family);
+  font-size: var(--md-font-size);
   line-height: 2;
-  background-color: rgba(250, 249, 245, 1);
+  background-color: var(--md-container-bg);
   border: 1px solid rgba(255, 255, 255, 0.01);
   border-radius: 25px;
   padding: 12px 12px;
 }
 
 #output {
-  font-family: PingFang SC, system-ui, -apple-system, BlinkMacSystemFont, Helvetica Neue, Hiragino Sans GB, Microsoft YaHei UI, Microsoft YaHei, Arial, sans-serif;
-  font-size: 15px;
+  font-family: var(--md-font-family);
+  font-size: var(--md-font-size);
   line-height: 2;
 }
 
@@ -26,8 +26,8 @@ h1 {
   display: table;
   padding: 0.3em 1em;
   margin: 20px auto;
-  color: #3B3B38;
-  background: #D97757;
+  color: hsl(var(--foreground));
+  background: var(--md-primary-color);
   border-radius: 15px;
   font-size: 28px;
   font-weight: bold;
@@ -41,16 +41,16 @@ h2 {
   padding-bottom: 0;
   margin: 0 auto 20px;
   width: 100%;
-  color: #D97757;
+  color: var(--md-primary-color);
   font-size: 20px;
   font-weight: bold;
-  border-bottom: 2px solid #E4B1A0;
+  border-bottom: 2px solid var(--md-accent-color);
 }
 
 /* ==================== 三级标题 ==================== */
 h3 {
   margin: 0 8px 10px;
-  color: #3B3B38;
+  color: hsl(var(--foreground));
   font-size: 18px;
   font-weight: bold;
 }
@@ -58,7 +58,7 @@ h3 {
 /* ==================== 四级标题 ==================== */
 h4 {
   margin: 0 8px 10px;
-  color: #D97757;
+  color: var(--md-primary-color);
   font-size: 16px;
   font-weight: bold;
 }
@@ -68,7 +68,7 @@ h5 {
   display: inline-block;
   margin: 0 8px 10px;
   padding: 4px 10px;
-  color: #3B3B38;
+  color: hsl(var(--foreground));
   background: rgba(255, 255, 255, 0.7);
   border: 1px solid rgb(189, 224, 254);
   border-radius: 20px;
@@ -79,7 +79,7 @@ h5 {
 /* ==================== 六级标题 ==================== */
 h6 {
   margin: 0 8px 10px;
-  color: #D97757;
+  color: var(--md-primary-color);
   font-size: 16px;
   font-weight: bold;
 }
@@ -87,7 +87,7 @@ h6 {
 /* ==================== 段落 ==================== */
 p {
   margin: 20px 0;
-  color: #3B3B38;
+  color: hsl(var(--foreground));
   line-height: 2;
   letter-spacing: 0px;
   font-size: 15px;
@@ -97,15 +97,15 @@ p {
 blockquote {
   font-style: normal;
   padding: 15px 12px;
-  border-left: 7px solid rgba(228, 177, 160, 1);
+  border-left: 7px solid var(--md-accent-color);
   border-radius: 10px;
-  color: #3B3B38;
-  background-color: rgba(255, 255, 255, 0.6);
+  color: hsl(var(--foreground));
+  background-color: var(--blockquote-background);
   margin: 12px 0;
 }
 
 blockquote > p {
-  color: #3B3B38;
+  color: hsl(var(--foreground));
   font-size: 14px;
   margin: 0;
 }
@@ -139,7 +139,7 @@ ul {
 
 li {
   margin: 0.2em 0;
-  color: #3B3B38;
+  color: hsl(var(--foreground));
   font-size: 15px;
 }
 
@@ -147,35 +147,35 @@ li {
 hr {
   border-style: solid;
   border-width: 1px 0 0;
-  border-color: #D97757;
+  border-color: var(--md-primary-color);
   margin: 0;
 }
 
 /* ==================== 强调 ==================== */
 strong {
-  color: #3B3B38;
+  color: hsl(var(--foreground));
   font-weight: bold;
 }
 
 /* ==================== 标记高亮 ==================== */
 .markup-highlight {
-  background-color: #3B3B3B;
+  background-color: hsl(var(--foreground));
   padding: 10px;
-  color: #FAF9F5;
+  color: var(--md-container-bg);
 }
 
 .markup-underline {
   text-decoration: underline;
-  text-decoration-color: #E4B1A0;
+  text-decoration-color: var(--md-accent-color);
 }
 
 /* ==================== 链接 ==================== */
 a {
-  color: #D97757;
+  color: var(--md-primary-color);
   text-decoration: none;
 }
 
 /* ==================== 表格 ==================== */
 th {
-  background: rgba(217, 119, 87, 0.1);
+  background: color-mix(in srgb, var(--md-primary-color) 10%, transparent);
 }
