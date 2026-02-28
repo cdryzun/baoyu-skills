@@ -2,6 +2,11 @@
 
 [English](./CHANGELOG.md) | 中文
 
+## 1.37.1 - 2026-02-27
+
+### 修复
+- `baoyu-danger-gemini-web`：同步上游模型请求头并更新模型列表 (by @xkcoding)
+
 ## 1.37.0 - 2026-02-27
 
 ### 新功能

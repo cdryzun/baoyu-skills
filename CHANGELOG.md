@@ -2,6 +2,11 @@
 
 English | [中文](./CHANGELOG.zh.md)
 
+## 1.37.1 - 2026-02-27
+
+### Fixes
+- `baoyu-danger-gemini-web`: sync model headers with upstream and update model list (by @xkcoding)
+
 ## 1.37.0 - 2026-02-27
 
 ### Features
