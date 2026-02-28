@@ -2,6 +2,11 @@
 
 English | [中文](./CHANGELOG.zh.md)
 
+## 1.40.1 - 2026-02-28
+
+### Features
+- `baoyu-image-gen`: clarify model resolution priority (EXTEND.md overrides env vars) and display current model with switch hints during generation
+
 ## 1.40.0 - 2026-02-28
 
 ### Features
