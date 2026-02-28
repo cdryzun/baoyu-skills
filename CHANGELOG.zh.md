@@ -2,6 +2,17 @@
 
 [English](./CHANGELOG.md) | 中文
 
+## 1.38.0 - 2026-02-28
+
+### 新功能
+- `baoyu-danger-x-to-markdown`：支持文章内嵌推文渲染，以引用块形式显示作者信息和推文摘要
+- `baoyu-danger-x-to-markdown`：`--download-media` 复用已转换的 Markdown 文件，跳过重复抓取
+- `baoyu-danger-x-to-markdown`：推特图片下载升级至 4096x4096 高分辨率
+
+### 修复
+- `baoyu-danger-x-to-markdown`：改进实体解析逻辑，通过逻辑键查找提升媒体和链接映射准确性
+- `baoyu-danger-x-to-markdown`：所有区块类型（标题、列表、引用块）支持尾随媒体展示
+
 ## 1.37.1 - 2026-02-27
 
 ### 修复

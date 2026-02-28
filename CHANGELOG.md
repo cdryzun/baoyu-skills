@@ -2,6 +2,17 @@
 
 English | [中文](./CHANGELOG.zh.md)
 
+## 1.38.0 - 2026-02-28
+
+### Features
+- `baoyu-danger-x-to-markdown`: render embedded tweets in articles as blockquotes with author info and text summary
+- `baoyu-danger-x-to-markdown`: reuse existing markdown when `--download-media` targets already-converted URLs
+- `baoyu-danger-x-to-markdown`: upgrade Twitter image downloads to 4096x4096 high resolution
+
+### Fixes
+- `baoyu-danger-x-to-markdown`: improve entity resolution with logical key lookup for reliable media and link mapping
+- `baoyu-danger-x-to-markdown`: support trailing media for all block types (headings, lists, blockquotes)
+
 ## 1.37.1 - 2026-02-27
 
 ### Fixes
