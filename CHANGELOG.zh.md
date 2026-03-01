@@ -2,6 +2,12 @@
 
 [English](./CHANGELOG.md) | 中文
 
+## 1.42.2 - 2026-03-01
+
+### 新功能
+- `baoyu-markdown-to-html`：内联渲染管线（移除子进程），修复 CJK 强调符号处理顺序，增强 modern 主题（GFM 警告块、排版改进）
+- `baoyu-post-to-wechat`：内置 Markdown 转换模块化渲染器，新增颜色支持，简化发布流程
+
 ## 1.42.1 - 2026-02-28
 
 ### 新功能

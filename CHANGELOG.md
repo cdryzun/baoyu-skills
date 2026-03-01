@@ -2,6 +2,12 @@
 
 English | [中文](./CHANGELOG.zh.md)
 
+## 1.42.2 - 2026-03-01
+
+### Features
+- `baoyu-markdown-to-html`: inline rendering pipeline (no subprocess), fix CJK emphasis order, enhance modern theme with GFM alerts and improved typography
+- `baoyu-post-to-wechat`: internalize markdown conversion with modular renderer, add color support, simplify publishing workflow
+
 ## 1.42.1 - 2026-02-28
 
 ### Features
