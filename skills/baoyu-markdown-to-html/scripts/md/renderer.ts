@@ -400,10 +400,10 @@ export function renderMarkdown(raw: string, renderer: RendererAPI): {
   html: string;
   readingTime: ReadTimeResults;
 } {
-  const preprocessed = preprocessCjkEmphasis(raw);
   const { markdownContent, readingTime: readingTimeResult } =
-    renderer.parseFrontMatterAndContent(preprocessed);
-  const html = marked.parse(markdownContent) as string;
+    renderer.parseFrontMatterAndContent(raw);
+  const preprocessed = preprocessCjkEmphasis(markdownContent);
+  const html = marked.parse(preprocessed) as string;
   return { html, readingTime: readingTimeResult };
 }
 
