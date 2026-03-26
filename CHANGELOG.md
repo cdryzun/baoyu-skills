@@ -2,6 +2,11 @@
 
 English | [中文](./CHANGELOG.zh.md)
 
+## 1.86.0 - 2026-03-25
+
+### Features
+- `baoyu-translate`: enrich translation prompt with full analysis context — source voice assessment, structured figurative language mapping, comprehension challenge reasoning, structural/creative challenges, and chunk position context for subagents
+
 ## 1.85.0 - 2026-03-25
 
 ### Features
