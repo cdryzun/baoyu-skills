@@ -300,6 +300,17 @@ If nothing matches, skip and plan from scratch in Step 6d. Do not force a near-m
 
 Before writing any SVG, draft a short layout plan. Do the math once, correctly, so the SVG comes out right on the first pass.
 
+**6d-0. Draft the Mermaid sketch first** — write a Mermaid code block that captures the **structural intent** of the diagram: which nodes exist, how they connect, what direction they flow, and any grouping (subgraphs). This is the single source of truth for *what* to draw; everything after it (coordinates, widths, arrows) answers *how*.
+
+Rules for the Mermaid sketch:
+- Use the Mermaid dialect that best matches the diagram type: `flowchart TD/LR` for flowcharts, `sequenceDiagram` for sequence, `classDiagram` for class, `flowchart` with subgraphs for structural/illustrative.
+- Include every node, every edge, every label, and every subgraph/container. If a node won't appear in the Mermaid, it won't appear in the SVG.
+- Edge labels must match the final SVG labels — write them now, not later.
+- Keep it concise: the sketch is a structural contract, not a rendering. Mermaid can't express baoyu's visual design (colors, rounded rects, dark mode), so don't try — those come in 6d-ii and 6e.
+- For patterns that have a Mermaid reference in `references/patterns/`, start from that reference and adapt it to the specific topic.
+
+Save the Mermaid block in the plan file. When writing SVG in Step 6e, **cross-check every node and edge against this Mermaid sketch** — if the sketch has it, the SVG must have it; if the SVG adds something the sketch doesn't have, update the sketch first.
+
 **6d-i. Extract structure from the source** — don't just transcribe bullets into boxes. Read the source looking for these elements. Not every element will be present, but every present element should land in the diagram:
 
 - **Mechanism name** — does the topic have a short, nameable identity (Autoreason, AutoResearch, OAuth, JWT auth, Reflexion loop)? If yes, that's a candidate `.title`.
@@ -333,11 +344,13 @@ Write the answers to these in the plan file. If ≥3 of them land, you're buildi
 5. **Map arrows** and verify none cross an unrelated box. Use L-bends where a straight line would collide. (Sequence messages are always straight horizontal lines — no L-bends. Fan-out candidates converge to a common `ymid` channel just above the judge box.)
 6. **Compute viewBox height**: `H = max_y + 20` where `max_y` is the bottom of the lowest element. Poster flowcharts routinely reach H=800–950 — don't force them to be compact.
 
-Save this plan:
+Save this plan (including the Mermaid sketch from 6d-0):
 - **Single mode**: `diagram/{slug}/plan.md`
 - **Multi mode**: `diagram/{article-slug}/NN-{type}-{slug}/plan.md`
 
 #### 6e: Write the SVG
+
+**Start from the Mermaid sketch in the plan.** Walk the sketch node-by-node, edge-by-edge, and translate each element into SVG using the coordinates and widths computed in 6d-ii. The Mermaid sketch is the structural checklist — every node and edge in it must appear in the SVG. If you find yourself adding an element that isn't in the sketch, stop and update the sketch first so the plan stays authoritative.
 
 Emit a single `<svg width="100%" viewBox="0 0 680 H">` element. Copy the `<style>` + `<defs>` block from `svg-template.md` **verbatim** — don't abbreviate or edit the color ramp definitions. Then add visual elements in z-order:
 
@@ -354,6 +367,8 @@ Typography rules:
 - Every `<text>` element gets a class (`t`, `ts`, or `th`) — never hardcode fill colors on text
 
 #### 6f: Run the pre-save checklist
+
+**Mermaid–SVG consistency check** (run before the pitfalls checklist): re-read the Mermaid sketch from the plan. For every node in the sketch, confirm the SVG has a corresponding `<rect>` + `<text>`. For every edge, confirm a `<path>` or `<line>` connects the correct pair. Missing elements are bugs — fix them before continuing.
 
 Walk through every item in `references/pitfalls.md`. The top failures to catch every time:
 
