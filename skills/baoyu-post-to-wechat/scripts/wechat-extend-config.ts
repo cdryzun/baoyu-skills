@@ -2,6 +2,8 @@ import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
 
+export type StrictHostKeyChecking = "yes" | "no" | "accept-new";
+
 export interface WechatAccount {
   name: string;
   alias: string;
@@ -13,6 +15,14 @@ export interface WechatAccount {
   app_id?: string;
   app_secret?: string;
   chrome_profile_path?: string;
+  remote_publish_host?: string;
+  remote_publish_user?: string;
+  remote_publish_port?: number;
+  remote_publish_identity_file?: string;
+  remote_publish_known_hosts_file?: string;
+  remote_publish_strict_host_key_checking?: StrictHostKeyChecking;
+  remote_publish_connect_timeout?: number;
+  remote_publish_proxy_jump?: string;
 }
 
 export interface WechatExtendConfig {
@@ -23,6 +33,14 @@ export interface WechatExtendConfig {
   need_open_comment?: number;
   only_fans_can_comment?: number;
   chrome_profile_path?: string;
+  remote_publish_host?: string;
+  remote_publish_user?: string;
+  remote_publish_port?: number;
+  remote_publish_identity_file?: string;
+  remote_publish_known_hosts_file?: string;
+  remote_publish_strict_host_key_checking?: StrictHostKeyChecking;
+  remote_publish_connect_timeout?: number;
+  remote_publish_proxy_jump?: string;
   accounts?: WechatAccount[];
 }
 
@@ -36,6 +54,14 @@ export interface ResolvedAccount {
   app_id?: string;
   app_secret?: string;
   chrome_profile_path?: string;
+  remote_publish_host?: string;
+  remote_publish_user?: string;
+  remote_publish_port?: number;
+  remote_publish_identity_file?: string;
+  remote_publish_known_hosts_file?: string;
+  remote_publish_strict_host_key_checking?: StrictHostKeyChecking;
+  remote_publish_connect_timeout?: number;
+  remote_publish_proxy_jump?: string;
 }
 
 function stripQuotes(s: string): string {
@@ -44,6 +70,26 @@ function stripQuotes(s: string): string {
 
 function toBool01(v: string): number {
   return v === "1" || v === "true" ? 1 : 0;
+}
+
+function toOptionalPort(v: string): number | undefined {
+  const n = Number.parseInt(v, 10);
+  if (!Number.isFinite(n) || n < 1 || n > 65535) return undefined;
+  return n;
+}
+
+function toOptionalPositiveInt(v: string): number | undefined {
+  const n = Number.parseInt(v, 10);
+  if (!Number.isFinite(n) || n <= 0) return undefined;
+  return n;
+}
+
+function toStrictHostKeyChecking(v: string): StrictHostKeyChecking | undefined {
+  const lower = v.toLowerCase();
+  if (lower === "yes" || lower === "no" || lower === "accept-new") {
+    return lower;
+  }
+  return undefined;
 }
 
 function parseWechatExtend(content: string): WechatExtendConfig {
@@ -106,6 +152,14 @@ function parseWechatExtend(content: string): WechatExtendConfig {
       case "need_open_comment": config.need_open_comment = toBool01(val); break;
       case "only_fans_can_comment": config.only_fans_can_comment = toBool01(val); break;
       case "chrome_profile_path": config.chrome_profile_path = val; break;
+      case "remote_publish_host": config.remote_publish_host = val; break;
+      case "remote_publish_user": config.remote_publish_user = val; break;
+      case "remote_publish_port": config.remote_publish_port = toOptionalPort(val); break;
+      case "remote_publish_identity_file": config.remote_publish_identity_file = val; break;
+      case "remote_publish_known_hosts_file": config.remote_publish_known_hosts_file = val; break;
+      case "remote_publish_strict_host_key_checking": config.remote_publish_strict_host_key_checking = toStrictHostKeyChecking(val); break;
+      case "remote_publish_connect_timeout": config.remote_publish_connect_timeout = toOptionalPositiveInt(val); break;
+      case "remote_publish_proxy_jump": config.remote_publish_proxy_jump = val; break;
     }
   }
 
@@ -123,6 +177,18 @@ function parseWechatExtend(content: string): WechatExtendConfig {
       app_id: a.app_id || undefined,
       app_secret: a.app_secret || undefined,
       chrome_profile_path: a.chrome_profile_path || undefined,
+      remote_publish_host: a.remote_publish_host || undefined,
+      remote_publish_user: a.remote_publish_user || undefined,
+      remote_publish_port: a.remote_publish_port ? toOptionalPort(a.remote_publish_port) : undefined,
+      remote_publish_identity_file: a.remote_publish_identity_file || undefined,
+      remote_publish_known_hosts_file: a.remote_publish_known_hosts_file || undefined,
+      remote_publish_strict_host_key_checking: a.remote_publish_strict_host_key_checking
+        ? toStrictHostKeyChecking(a.remote_publish_strict_host_key_checking)
+        : undefined,
+      remote_publish_connect_timeout: a.remote_publish_connect_timeout
+        ? toOptionalPositiveInt(a.remote_publish_connect_timeout)
+        : undefined,
+      remote_publish_proxy_jump: a.remote_publish_proxy_jump || undefined,
     }));
   }
 
@@ -168,6 +234,15 @@ export function resolveAccount(config: WechatExtendConfig, alias?: string): Reso
     app_id: acct?.app_id,
     app_secret: acct?.app_secret,
     chrome_profile_path: acct?.chrome_profile_path ?? config.chrome_profile_path,
+    remote_publish_host: acct?.remote_publish_host ?? config.remote_publish_host,
+    remote_publish_user: acct?.remote_publish_user ?? config.remote_publish_user,
+    remote_publish_port: acct?.remote_publish_port ?? config.remote_publish_port,
+    remote_publish_identity_file: acct?.remote_publish_identity_file ?? config.remote_publish_identity_file,
+    remote_publish_known_hosts_file: acct?.remote_publish_known_hosts_file ?? config.remote_publish_known_hosts_file,
+    remote_publish_strict_host_key_checking:
+      acct?.remote_publish_strict_host_key_checking ?? config.remote_publish_strict_host_key_checking,
+    remote_publish_connect_timeout: acct?.remote_publish_connect_timeout ?? config.remote_publish_connect_timeout,
+    remote_publish_proxy_jump: acct?.remote_publish_proxy_jump ?? config.remote_publish_proxy_jump,
   };
 }
 
